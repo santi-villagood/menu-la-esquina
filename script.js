@@ -56,20 +56,49 @@ function dibujarMenu(menu) {
   resaltarCategoriaActiva();
 }
 
-// Marca en la barra la categoría que se está viendo mientras scrolleás
+// Marca la categoría activa al hacer clic o al scrollear (incluso al final de la página)
 function resaltarCategoriaActiva() {
-  const enlaces = document.querySelectorAll(".categorias a");
-  const observador = new IntersectionObserver(entradas => {
-    entradas.forEach(e => {
-      if (e.isIntersecting) {
-        enlaces.forEach(a => a.classList.toggle("activa", a.hash === "#" + e.target.id));
-        const activo = document.querySelector(".categorias a.activa");
-        if (activo) activo.scrollIntoView({ inline: "center", block: "nearest" });
-      }
-    });
-  }, { rootMargin: "-20% 0px -70% 0px" });
+  const enlaces = Array.from(document.querySelectorAll(".categorias a"));
+  const secciones = Array.from(document.querySelectorAll(".seccion"));
+  let bloqueadoPorClic = false;
+  let temporizador;
 
-  document.querySelectorAll(".seccion").forEach(s => observador.observe(s));
+  function activar(id) {
+    enlaces.forEach(a => a.classList.toggle("activa", a.hash === "#" + id));
+    const activo = document.querySelector(".categorias a.activa");
+    if (activo) activo.scrollIntoView({ inline: "center", block: "nearest", behavior: "smooth" });
+  }
+
+  // Al tocar un botón, se marca al instante sin parpadear por las categorías intermedias
+  enlaces.forEach(enlace => {
+    enlace.addEventListener("click", () => {
+      bloqueadoPorClic = true;
+      activar(enlace.hash.slice(1));
+      clearTimeout(temporizador);
+      temporizador = setTimeout(() => { bloqueadoPorClic = false; }, 800);
+    });
+  });
+
+  // Al bajar o subir manualmente, detecta la sección visible o el final del menú
+  window.addEventListener("scroll", () => {
+    if (bloqueadoPorClic || secciones.length === 0) return;
+
+    const alFinal = window.innerHeight + Math.round(window.scrollY) >= document.documentElement.scrollHeight - 10;
+    if (alFinal) {
+      activar(secciones[secciones.length - 1].id);
+      return;
+    }
+
+    let actual = secciones[0].id;
+    for (const seccion of secciones) {
+      if (seccion.getBoundingClientRect().top <= 130) {
+        actual = seccion.id;
+      }
+    }
+    activar(actual);
+  }, { passive: true });
+
+  if (secciones.length > 0) activar(secciones[0].id);
 }
 
 // 2. Cargar los datos. Para cambiar el menú se edita SOLO menu.json
