@@ -72,8 +72,7 @@ function resaltarCategoriaActiva() {
     enlaces.forEach(a => a.classList.toggle("activa", a.hash === "#" + id));
     const activo = document.querySelector(".categorias a.activa");
     if (activo && nav) {
-      const centro = activo.offsetLeft - (nav.clientWidth / 2) + (activo.offsetWidth / 2);
-      nav.scrollTo({ left: centro, behavior: "smooth" });
+      nav.scrollLeft = activo.offsetLeft - (nav.clientWidth / 2) + (activo.offsetWidth / 2);
     }
   }
 
