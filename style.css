@@ -1,0 +1,104 @@
+:root {
+  --tinta: #12294a;
+  --azulejo: #1f4e8c;
+  --mostaza: #e8b13a;
+  --fondo: #f3f6f9;
+  --linea: #c9d4e0;
+  --suave: #4d5f78;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; scroll-padding-top: 64px; }
+
+body {
+  margin: 0;
+  background: var(--fondo);
+  color: var(--tinta);
+  font-family: "Figtree", system-ui, sans-serif;
+  font-size: 1.0625rem;
+  line-height: 1.5;
+}
+
+/* Portada */
+.portada {
+  background: var(--tinta);
+  color: #fff;
+  padding: 2.5rem 1.25rem 2rem;
+  border-bottom: 6px solid var(--mostaza);
+}
+.portada h1 {
+  margin: 0;
+  font-family: "Bricolage Grotesque", system-ui, sans-serif;
+  font-weight: 800;
+  font-size: clamp(2.6rem, 12vw, 4.5rem);
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+.portada p { margin: .6rem 0 0; color: #c8d6ea; }
+
+/* Barra de categorías fija */
+.categorias {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  gap: .5rem;
+  padding: .7rem 1rem;
+  overflow-x: auto;
+  background: var(--fondo);
+  border-bottom: 1px solid var(--linea);
+  scrollbar-width: none;
+}
+.categorias::-webkit-scrollbar { display: none; }
+.categorias a {
+  flex: none;
+  padding: .45rem 1rem;
+  border-radius: 999px;
+  border: 1.5px solid var(--azulejo);
+  color: var(--azulejo);
+  font-weight: 600;
+  text-decoration: none;
+}
+.categorias a.activa {
+  background: var(--azulejo);
+  color: #fff;
+}
+
+/* Menú */
+main { max-width: 38rem; margin: 0 auto; padding: 0 1.25rem 2rem; }
+
+.seccion h2 {
+  margin: 2rem 0 .5rem;
+  font-family: "Bricolage Grotesque", system-ui, sans-serif;
+  font-size: 1.75rem;
+  color: var(--azulejo);
+}
+
+.plato { padding: .85rem 0; border-bottom: 1px solid var(--linea); }
+.plato:last-child { border-bottom: 0; }
+.plato-linea { display: flex; align-items: baseline; gap: .75rem; }
+.plato-nombre { font-weight: 600; font-size: 1.125rem; }
+.plato-relleno { flex: 1; border-bottom: 2px dotted var(--linea); transform: translateY(-4px); }
+.plato-precio { font-weight: 600; font-variant-numeric: tabular-nums; }
+.plato-desc { margin: .2rem 0 0; color: var(--suave); font-size: .975rem; max-width: 30rem; }
+
+.tag {
+  display: inline-block;
+  margin: .35rem .4rem 0 0;
+  padding: .1rem .55rem;
+  border-radius: 6px;
+  background: var(--mostaza);
+  color: var(--tinta);
+  font-size: .8rem;
+  font-weight: 600;
+}
+
+.pie { padding: 1.5rem 1.25rem 3rem; text-align: center; color: var(--suave); font-size: .9rem; }
+
+.error { max-width: 38rem; margin: 2rem auto; padding: 1rem 1.25rem; background: #fff3cd; border-radius: 8px; }
+
+.categorias a:focus-visible { outline: 3px solid var(--mostaza); outline-offset: 2px; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+}
