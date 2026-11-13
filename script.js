@@ -56,20 +56,27 @@ function dibujarMenu(menu) {
   resaltarCategoriaActiva();
 }
 
-// Marca la categoría activa al hacer clic o al scrollear (incluso al final de la página)
+// Marca la categoría activa sin interferir con el scroll vertical de la página
 function resaltarCategoriaActiva() {
+  const nav = document.getElementById("categorias");
   const enlaces = Array.from(document.querySelectorAll(".categorias a"));
   const secciones = Array.from(document.querySelectorAll(".seccion"));
   let bloqueadoPorClic = false;
   let temporizador;
+  let idActivo = "";
 
   function activar(id) {
+    if (id === idActivo) return;
+    idActivo = id;
+
     enlaces.forEach(a => a.classList.toggle("activa", a.hash === "#" + id));
     const activo = document.querySelector(".categorias a.activa");
-    if (activo) activo.scrollIntoView({ inline: "center", block: "nearest", behavior: "smooth" });
+    if (activo && nav) {
+      const centro = activo.offsetLeft - (nav.clientWidth / 2) + (activo.offsetWidth / 2);
+      nav.scrollTo({ left: centro, behavior: "smooth" });
+    }
   }
 
-  // Al tocar un botón, se marca al instante sin parpadear por las categorías intermedias
   enlaces.forEach(enlace => {
     enlace.addEventListener("click", () => {
       bloqueadoPorClic = true;
@@ -79,7 +86,6 @@ function resaltarCategoriaActiva() {
     });
   });
 
-  // Al bajar o subir manualmente, detecta la sección visible o el final del menú
   window.addEventListener("scroll", () => {
     if (bloqueadoPorClic || secciones.length === 0) return;
 
